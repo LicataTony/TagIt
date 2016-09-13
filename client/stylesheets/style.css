@@ -32,3 +32,14 @@ body {
   font-size: 32px;
   color: #777
 }
+
+.tagItemOptions{
+  float: right;
+  font-size: 16px;
+}
+
+.private-text{
+  font-size: 20px;
+  color: #A33;
+  display: inline;
+}

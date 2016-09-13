@@ -1,4 +1,8 @@
 Meteor.publish('tagsList', function() {
+  return Tags.find({approved: true});
+});
+
+Meteor.publish('tagsListAdmin', function() {
   return Tags.find();
 });
 /*

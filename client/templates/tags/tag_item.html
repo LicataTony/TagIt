@@ -1,0 +1,12 @@
+<Template name="tagItem">
+  <p>#{{tagName}}
+    {{#if isAdmin}}
+      <div class="tagItemOptions">
+        <div class="private-text">{{private}}</div>
+        <input type="checkbox" name="approved" value="approved" class="cb approved" {{approved}}/>Approuver
+        <a type="button" class="btn delete" href="#">Supprimer</a>
+      </div>
+      <hr/>
+    {{/if}}
+  </p>
+</Template>
