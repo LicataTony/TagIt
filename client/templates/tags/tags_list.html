@@ -1,0 +1,12 @@
+<template name="tagsList">
+  <div class="well tags-list">
+    <div class="search-list">
+      <input type="text" class="search-input" id="searchInput" placeholder="Le tag que vous recherchez" value="" autofocus=true/>
+      <div class="tags">
+        {{#each tags}}
+          {{> tagItem}}
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</template>

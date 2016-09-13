@@ -1,7 +1,7 @@
-/*Meteor.publish('personnesAdmin', function() {
-  return Personnes.find();
+Meteor.publish('tagsList', function() {
+  return Tags.find();
 });
-
+/*
 Meteor.publish('personnesList', function() {
   var argRequest =    {$and: [
         {$or: [{hidden: {$exists: false}},{hidden: false}]},
