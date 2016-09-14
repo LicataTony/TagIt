@@ -1,5 +1,10 @@
 <Template name="markerAdd">
   <div class="marker-add">
+    {{#if notHidden}}
+      <div class="well" {{color}}>
+        <p>{{text}}</p>
+      </div>
+    {{/if}}
     <form>
       <label class="control-label" for="name">Nom</label>
         <div class="controls">

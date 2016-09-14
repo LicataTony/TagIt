@@ -5,14 +5,33 @@ var markerId = "clickableMarker";
 
 var markerErrorKey = "markerError";
 
+var notHidden = "notHidden";
+
+var color = "color";
+
+var text = "text";
+
+
 Template.markerAdd.helpers({
   errorMessage: function(field){
     return printErrorMessage(field);
+  },
+  notHidden: function(){
+    return session.get(notHidden);
+  },
+  color: function(){
+    return session.get(color);
+  },
+  text: function(){
+    return session.get(text);
   }
 });
 
 Template.markerAdd.onCreated(function(){
   session.clear(markerErrorKey);
+  session.clear(notHidden);
+  session.clear(color);
+  session.clear(text);
 });
 
 var printErrorMessage = function(field){
@@ -69,11 +88,15 @@ var controlData = function(data, markerError){
 
 var markerAdd = function(data){
   Meteor.call('markerAdd', {name: data.name, privateTag: data.privateTag, x: data.x, y: data.y}, function(e){
+    session.set(notHidden, true);
     if(typeof e !== undefined){
       session.clear(markerErrorKey);
-      Router.go('/');
+      session.set(color, 'style="background: green;"');
+      session.set(text, 'Votre évenement a bien été enregistré!')
     }else{
       console.log(e);
+      session.set(color, 'style="background: red;"')
+      session.set(text, "Le tag privé que vous avez mentionné n'existe pas!")
     }
   });
 };
