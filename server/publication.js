@@ -1,9 +1,13 @@
-Meteor.publish('tagsList', function() {
+Meteor.publish('tagsListApproved', function() {
   return Tags.find({approved: true});
 });
 
-Meteor.publish('tagsListAdmin', function() {
+Meteor.publish('tagsListAll', function() {
   return Tags.find();
+});
+
+Meteor.publish('tagsListPrivate', function() {
+  return Tags.find({private: true});
 });
 /*
 Meteor.publish('personnesList', function() {

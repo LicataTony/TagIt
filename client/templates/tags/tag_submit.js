@@ -52,7 +52,7 @@ var controlData = function(data, tagError){
 var tagAdd = function(data){
   Meteor.call('tagAdd', {name: data.name, private: data.private}, function(e){
     if(typeof e !== undefined){
-      session.clear('personneError');
+      session.clear(tagErrorKey);
       Router.go('/');
     }else{
       console.log(e);

@@ -1,7 +1,7 @@
-var load = function(){
+var load = function(options){
   maps = [];
   markers = [];
-  return GoogleMaps.load();
+  return GoogleMaps.load(options);
 };
 
 var loaded = function(){
@@ -36,6 +36,7 @@ var ready = function(mapKey, action){
 
 var addMarker = function(mapKey, lat , lng , idref , title){
   exist = false;
+
   markers.forEach(function(marker){
     if(marker._id == idref) exist = true;
   });
@@ -52,10 +53,19 @@ var addMarker = function(mapKey, lat , lng , idref , title){
      //markers[idref] = marker;
     markers.push(marker);
     return marker;
+  }else{
+    updateMarker(mapKey, lat, lng, idref, title);
   }
 };
 
-var addClickListener = function(id, listener) {
+var addMapClickListener = function(markerArgs){
+  var currentMap = getMap(markerArgs.mapKey);
+  google.maps.event.addListener(currentMap.instance, 'click', function(event){
+    addMarker(markerArgs.mapKey, event.latLng.lat(), event.latLng.lng(), markerArgs._id, markerArgs.title);
+  });
+};
+
+var addMarkerClickListener = function(id, listener) {
   var choosenMarker;
   markers.forEach(function(marker){
     if(marker._id==id) choosenMarker=marker;
@@ -86,8 +96,8 @@ var updateMarker = function(mapKey, lat , lng , idref , title){
   var label = title.charAt(0);
   var currentMap = getMap(mapKey);
   markers.forEach(function(marker){
-    if(marker._id==id){
-      marker.setMap(currentMap);
+    if(marker._id==idref){
+      marker.setMap(currentMap.instance);
       marker.setPosition(new google.maps.LatLng(lat,lng));
       marker.setTitle(title);
       marker.setLabel(label);
@@ -125,6 +135,21 @@ var getMap = function(mapKey){
   return currentMap;
 };
 
+var getMarkerProperties = function(markerId){
+  var markerProperties = {};
+  markers.forEach(function(marker){
+    if(marker._id == markerId){
+      markerProperties = {
+        lat: marker.getPosition().lat(),
+        lng: marker.getPosition().lng(),
+        idref: marker._id,
+        title: marker.title
+      };
+    }
+  });
+  return markerProperties;
+};
+
 module.exports = {
   load: load,
   loaded: loaded,
@@ -132,9 +157,11 @@ module.exports = {
   getOptions: getOptions,
   ready: ready,
   addMarker: addMarker,
-  addClickListener: addClickListener,
+  addMapClickListener: addMapClickListener,
+  addMarkerClickListener: addMarkerClickListener,
   setMap: setMap,
   deleteMarker: deleteMarker,
   updateMarker: updateMarker,
-  updateSettingMarker: updateSettingMarker
+  updateSettingMarker: updateSettingMarker,
+  getMarkerProperties: getMarkerProperties
 };

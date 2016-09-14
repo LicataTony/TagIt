@@ -43,3 +43,9 @@ body {
   color: #A33;
   display: inline;
 }
+
+#map{
+  width: 800px;
+  max-width: 100%;
+  height: 500px;
+}

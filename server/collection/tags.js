@@ -1,12 +1,10 @@
-Tags = new Mongo.Collection('tags');
-
 Meteor.methods({
   tagAdd: function(tagDatas){
     check(tagDatas, {
       name: String,
       private: Boolean
     });
-    if(Tags.find({name: tagDatas.name})) {
+    if(Tags.findOne({name: tagDatas.name})) {
       throw new Meteor.Error('invalid-tag', 'This tag is already taken!');
     }else{
       Tags.insert({name: tagDatas.name, private: tagDatas.private});
