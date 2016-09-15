@@ -38,25 +38,6 @@ var finishInitMap = function(map) {
   // Add a marker to the map once it's ready
   mapCtrl.setMap(mapKey, map);
   mapCtrl.addMapClickListener(markerArgs);
-/*
-  var personnes = Personnes.find({$or: [{hidden: {$exists: false}},{hidden: false}]});
-  loadExistingPersonnes(personnes);
-  Personnes.find().observe({
-    added: function(personne) {
-      // Create a marker for this document
-      pushPersonneOnMap(personne);
-      // mapCtrl.addMarker();
-    },
-    removed: function(oldPersonne) {
-      // Remove the marker from the map
-      deletePersonneOnMap(oldPersonne);
-    }
-  });
-  Personnes.find().observeChanges({
-    changed: function(id, fieldsChanged){
-      personnesChanged(id, fieldsChanged);
-    }
-  });*/
 };
 
 var loadExistingPersonnes = function(personnes){

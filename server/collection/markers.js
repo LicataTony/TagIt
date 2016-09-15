@@ -2,16 +2,15 @@ Meteor.methods({
   markerAdd: function(markerDatas){
     check(markerDatas, {
       name: String,
-      privateTag: String,
+      tag: String,
       x: Number,
       y: Number
     });
-    console.log(markerDatas);
-    var selectedTag = Tags.findOne({name: markerDatas.privateTag});
-    if(selectedTag.approved){
-    Markers.insert({name: markerDatas.name, privateTag: markerDatas.privateTag, x: markerDatas.x, y: markerDatas.y});
+    var selectedTag = Tags.findOne({name: markerDatas.tag});
+    if(selectedTag != null && selectedTag.approved){
+      Markers.insert({name: markerDatas.name, tag: markerDatas.tag, x: markerDatas.x, y: markerDatas.y});
     }else{
-      throw new Meteor.Error('invalide-privateTag', "This privateTag doesn't exist!")
+      throw new Meteor.Error('invalide-tag', "This tag doesn't exist!");
     }
   }
 });

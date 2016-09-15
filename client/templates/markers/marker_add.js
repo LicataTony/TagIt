@@ -63,9 +63,9 @@ var getData = function(e,t){
     //getName
   var name = $(e.target).find('[id=name]').val().toLowerCase();
   name = name.replace(' ','');
-    //getPrivateTag
-  var privateTag = $(e.target).find('[id=privateTag]').val().toLowerCase();
-  privateTag = privateTag.replace(' ','');
+    //getTag
+  var tag = $(e.target).find('[id=tag]').val().toLowerCase();
+  tag = tag.replace(' ','');
     //getPos
   var markerProperties = mapCtrl.getMarkerProperties(markerId);
   var x = markerProperties.lat;
@@ -76,27 +76,27 @@ var getData = function(e,t){
   if(isNaN(y)){
     y='';
   }
-  return {name: name, privateTag: privateTag, x: x, y: y};
+  return {name: name, tag: tag, x: x, y: y};
 };
 
 var controlData = function(data, markerError){
   if(data.name == '')               markerError.name = 'Veuillez entrer un nom!';
-  if(data.privateTag == '')         markerError.privateTag = 'Veuillez entrer un tag!';
+  if(data.tag == '')                markerError.tag = 'Veuillez entrer un tag!';
   if(data.x == '' || data.y == '')  markerError.mapPos = 'veuillez sélectionner un lieu!';
   return Object.getOwnPropertyNames(markerError).length === 0;
 };
 
 var markerAdd = function(data){
-  Meteor.call('markerAdd', {name: data.name, privateTag: data.privateTag, x: data.x, y: data.y}, function(e){
+  Meteor.call('markerAdd', {name: data.name, tag: data.tag, x: data.x, y: data.y}, function(e,r){
     session.set(notHidden, true);
-    if(typeof e !== undefined){
+    if(typeof e == 'undefined'){
       session.clear(markerErrorKey);
-      session.set(color, 'style="background: green;"');
+      session.set(color, 'background: #6D6; color: #111; font-weight: bold;');
       session.set(text, 'Votre évenement a bien été enregistré!')
     }else{
       console.log(e);
-      session.set(color, 'style="background: red;"')
-      session.set(text, "Le tag privé que vous avez mentionné n'existe pas!")
+      session.set(color, 'background: #D66; color: #111; font-weight: bold;')
+      session.set(text, "Le tag que vous avez mentionné n'existe pas!")
     }
   });
 };

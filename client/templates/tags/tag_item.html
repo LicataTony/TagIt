@@ -1,5 +1,6 @@
 <Template name="tagItem">
-  <p>#{{tagName}}
+  <p>
+    <a href="{{pathFor 'tagPage'}}">#{{tagName}}</a>
     {{#if isAdmin}}
       <div class="tagItemOptions">
         <div class="private-text">{{private}}</div>

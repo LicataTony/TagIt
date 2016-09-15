@@ -9,6 +9,14 @@ Meteor.publish('tagsListAll', function() {
 Meteor.publish('tagsListPrivate', function() {
   return Tags.find({private: true});
 });
+
+Meteor.publish('singleTag', function(name) {
+  return Tags.find({name: name});
+});
+
+Meteor.publish('markersByTag', function(name) {
+  return Markers.find({tag: name});
+});
 /*
 Meteor.publish('personnesList', function() {
   var argRequest =    {$and: [
