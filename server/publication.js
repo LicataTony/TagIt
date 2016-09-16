@@ -1,11 +1,14 @@
+  // /home
 Meteor.publish('tagsListApproved', function() {
   return Tags.find({approved: true});
 });
 
+  // /admin/approve
 Meteor.publish('tagsListAll', function() {
   return Tags.find();
 });
 
+  //?
 Meteor.publish('tagsListPrivate', function() {
   return Tags.find({private: true});
 });
