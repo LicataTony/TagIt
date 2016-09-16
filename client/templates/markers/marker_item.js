@@ -3,7 +3,11 @@ Template.markerItem.helpers({
     return this.description;
   },
   tag: function(){
-    return this.tag;
+    var tags = '';
+    this.tagsArray.forEach(function(tag){
+      tags += tag + ' ';
+    });
+    return tags;
   },
   date: function(){
     date = new Date(this.date);

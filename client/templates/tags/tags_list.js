@@ -5,7 +5,7 @@ Template.tagsList.helpers({
     if(session.get(searchText)){
       var searchedText = session.get(searchText)
       if(searchedText&&searchedText != ''){
-        return Tags.find({name: {$regex : ".*"+searchedText+".*"}});
+        return Tags.find({tagName: {$regex : ".*"+searchedText+".*"}});
       }
     }
   }

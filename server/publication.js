@@ -10,15 +10,18 @@ Meteor.publish('tagsListPrivate', function() {
   return Tags.find({private: true});
 });
 
-Meteor.publish('singleTag', function(name) {
-  return Tags.find({name: name});
+  // /tag/"tagName"
+Meteor.publish('singleTag', function(tagName) {
+  return Tags.find({tagName: tagName});
 });
 
-Meteor.publish('markersByTag', function(name) {
-  return Markers.find({tag: name});
+  // /tag/"tagName"
+Meteor.publish('markersByTag', function(tagName) {
+  return Markers.find({tagsArray: tagName});
 });
 
-Meteor.publish('markersAll', function(name) {
+  // /marker/list
+Meteor.publish('markersAll', function() {
   return Markers.find();
 });
 /*

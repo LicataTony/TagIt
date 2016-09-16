@@ -26,7 +26,7 @@ Template.markerAdd.helpers({
   },
   text: function(){
     if(session.get(submitMarkerSuccess))  return 'Votre évenement a bien été enregistré!';
-    if(session.get(submitMarkerError))    return "Le tag que vous avez mentionné n'existe pas!";
+    if(session.get(submitMarkerError))    return "Un ou plusieurs des tags que vous avez mentionné n'existe pas ou ne sont pas approuvés par l'administrateur!";
   },
   coorGps: function(){
     var latLng = session.get('latLng');
@@ -73,15 +73,13 @@ var getData = function(e,t){
     //getDescription
   var description = $(e.target).find('[id=description]').val().toLowerCase();
   description = description.replace(' ','');
-    //getTag
-  var tag = $(e.target).find('[id=tag]').val().toLowerCase();
-  tag = tag.replace(' ','');
+    //getTags
+  var tags = $(e.target).find('[id=tagsName]').val().toLowerCase();
+  tagsArray = tags.split(" ");
     //getDate
-  var date;
+  var date = getDate(e);
   var beginHour = $(e.target).find('[id=beginHour]').val();
   var endHour = $(e.target).find('[id=endHour]').val();
-  date = getDate(e);
-  console.log(date+' '+beginHour+' '+endHour);
     //getPos
   var markerProperties = mapCtrl.getMarkerProperties(markerId);
   var lat = markerProperties.lat;
@@ -92,33 +90,34 @@ var getData = function(e,t){
   if(isNaN(lng)){
     lng='';
   }
-  return {description: description, tag: tag, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng};
+  return {description: description, tagsArray: tagsArray, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng};
 };
 
 var getDate = function(e){
   var year = parseInt($(e.target).find('[id=year]').val());
   var month = parseInt($(e.target).find('[id=month]').val())-1; //-1 because months start to 0
   var day = parseInt($(e.target).find('[id=day]').val());
-  console.log(year+' '+month+' '+day)
   return new Date(year, month, day);
 }
 
 var controlData = function(data, markerError){
   if(data.description == '')                                            markerError.description = 'Veuillez entrer une description!';
-  if(data.tag == '')                                                    markerError.tag = 'Veuillez entrer un tag!';
-  if(data.date == null || data.beginHour == '' || data.endHour == '')   markerError.date = 'Veillez entrer une date valide!'
+  if(data.tagsArray.length == 0)                                        markerError.tags = 'Veuillez entrer au moins un tag!';
+  if(data.date == null || data.beginHour == '' || data.endHour == '')   markerError.date = 'Veuillez entrer une date valide!';
   if(data.lat == '' || data.lng == '')                                  markerError.mapPos = 'veuillez sélectionner un lieu!';
   return Object.getOwnPropertyNames(markerError).length === 0;
 };
 
 var markerAdd = function(data){
-  Meteor.call('markerAdd', {description: data.description, tag: data.tag, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng}, function(e,r){
+  Meteor.call('markerAdd', {description: data.description, tagsArray: data.tagsArray, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng}, function(e,r){
     session.set(notHidden, true);
     if(typeof e == 'undefined'){
       session.clear(markerErrorKey);
+      session.set(submitMarkerError, false);
       session.set(submitMarkerSuccess, true);
     }else{
       console.log(e);
+      session.set(submitMarkerSuccess, false);
       session.set(submitMarkerError, true);
     }
   });

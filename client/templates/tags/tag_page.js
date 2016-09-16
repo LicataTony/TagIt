@@ -1,8 +1,8 @@
 import * as session from '/client/lib/session';
 
 Template.tagPage.helpers({
-  name: function(){
-    return '#'+Tags.findOne().name;
+  tagName: function(){
+    return '#'+Tags.findOne().tagName;
   },
   privateStyle: function(){
     if(Tags.findOne().private) return "color: #711;";

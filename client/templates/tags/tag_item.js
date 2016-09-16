@@ -1,6 +1,6 @@
 Template.tagItem.helpers({
   tagName: function(){
-    return this.name;
+    return this.tagName;
   },
   isAdmin: function(){
     return (Router.current().route.getName().indexOf('tagApprove') !== -1);

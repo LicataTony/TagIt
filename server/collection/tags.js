@@ -1,13 +1,13 @@
 Meteor.methods({
   tagAdd: function(tagDatas){
     check(tagDatas, {
-      name: String,
+      tagName: String,
       private: Boolean
     });
-    if(Tags.findOne({name: tagDatas.name})) {
+    if(Tags.findOne({tagName: tagDatas.tagName})) {
       throw new Meteor.Error('invalid-tag', 'This tag is already taken!');
     }else{
-      Tags.insert({name: tagDatas.name, private: tagDatas.private});
+      Tags.insert({tagName: tagDatas.tagName, private: tagDatas.private});
     }
   },
   'tagApprove': function(args){

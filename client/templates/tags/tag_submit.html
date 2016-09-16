@@ -1,14 +1,14 @@
 <Template name="tagSubmit">
   <div class="tag-add">
     <form>
-      <label class="control-label" for="name">Nom</label>
+      <label class="control-label" for="tagName">Nom</label>
         <div class="controls">
-          <input name="name" id="name" type="text" value="" placeholder="Nom" class="form-control"/>
-          <span class="help-block">{{errorMessage 'name'}}</span>
+          <input name="tagName" id="tagName" type="text" value="" placeholder="Nom du tag" class="form-control"/>
+          <span class="help-block">{{errorMessage 'tagName'}}</span>
         </div>
       <label class="control-label" for="prenom">Privé</label>
       <input name="private" id="private" type="checkbox" class="form-cb"/>
-      <br>    
+      <br>
       <input type="submit" value="Submit" class="btn btn-primary"/>
     </form>
   </div>
