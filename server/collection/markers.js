@@ -1,14 +1,17 @@
 Meteor.methods({
   markerAdd: function(markerDatas){
     check(markerDatas, {
-      name: String,
+      description: String,
       tag: String,
-      x: Number,
-      y: Number
+      date: Date,
+      beginHour: String,
+      endHour: String,
+      lat: Number,
+      lng: Number
     });
     var selectedTag = Tags.findOne({name: markerDatas.tag});
     if(selectedTag != null && selectedTag.approved){
-      Markers.insert({name: markerDatas.name, tag: markerDatas.tag, x: markerDatas.x, y: markerDatas.y});
+      Markers.insert({description: markerDatas.description, tag: markerDatas.tag, date: markerDatas.date, beginHour: markerDatas.beginHour, endHour: markerDatas.endHour, lat: markerDatas.lat, lng: markerDatas.lng});
     }else{
       throw new Meteor.Error('invalide-tag', "This tag doesn't exist!");
     }

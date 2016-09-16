@@ -1,7 +1,10 @@
 <Template name="tagPage">
-  <div name="tag-page">
+  <div class="tag-page">
     <h1 class="title" style={{privateStyle}} >{{name}}</h1>
     <p>Les évenements correspondant au tag sélectionné:</p>
-    <!--{{> visualMap}}-->
+    {{> mapItem}}
+    <div class="markers-div">
+      {{> markersList}}
+    </div>
   </div>
 </Template>

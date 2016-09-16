@@ -6,24 +6,31 @@
       </div>
     {{/if}}
     <form>
-      <label class="control-label" for="name">Nom de l'évenement</label>
+      <label class="control-label" for="description">Description</label>
         <div class="controls">
-          <input name="name" id="name" type="text" value="" placeholder="Nom de l'évenement" class="form-control"/>
-          <span class="help-block">{{errorMessage 'name'}}</span>
+          <input name="description" id="description" type="text" value="testEvent2312311" placeholder="Description de l'évenement" class="form-control"/>
+          <span class="help-block">{{errorMessage 'description'}}</span>
         </div>
       <label class="control-label" for="tag">Tags</label>
         <div class="controls">
-          <input name="tag" id="tag" type="text" value="" placeholder="Vos tags" class="form-control"/>
+          <input name="tag" id="tag" type="text" value="testtag1" placeholder="Vos tags" class="form-control"/>
           <span class="help-block">{{errorMessage 'tag'}}</span>
         </div>
-        <label class="control-label" for="date">Dates</label>
+        <label class="control-label" for="date">Date et heure</label>
           <div class="controls">
-            <input name="beginDate" id="beginDate" type="text" value="" placeholder="Date de début" class="form-control"/>
-            <input name="endDate" id="endDate" type="text" value="" placeholder="Date de fin" class="form-control"/>
+            <div class="form-inline">
+              Date:
+              <input name="year" id="year" type="text" value="2016" placeholder="YYYY (année)" class="form-control marker-date" maxlength="4"/>
+              <input name="month" id="month" type="text" value="11" placeholder="MM (mois)" class="form-control marker-date" maxlength="2"/>
+              <input name="day" id="day" type="text" value="19" placeholder="DD (jour)" class="form-control marker-date" maxlength="2"/>
+              Heures:
+              <input name="beginHour" id="beginHour" type="text" value="18:00" placeholder="HH:MM (début)" class="form-control"/>
+              <input name="endHour" id="endHour" type="text" value="24:00" placeholder="HH:MM (fin)" class="form-control"/>
+            </div>
             <span class="help-block">{{errorMessage 'dates'}}</span>
           </div>
-      <label class="control-label">Coordonées GPS</label>
-        {{> clickableMapItem}}
+      <label class="control-label">Coordonées GPS {{coorGps}}</label>
+        {{> mapItem}}
         <span class="help-block">{{errorMessage 'mapPos'}}</span>
       <input type="submit" value="Submit" class="btn btn-primary"/>
     </form>

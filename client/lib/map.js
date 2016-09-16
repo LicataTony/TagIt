@@ -1,3 +1,5 @@
+import * as session from '/client/lib/session';
+
 var load = function(options){
   maps = [];
   markers = [];
@@ -61,6 +63,7 @@ var addMarker = function(mapKey, lat , lng , idref , title){
 var addMapClickListener = function(markerArgs){
   var currentMap = getMap(markerArgs.mapKey);
   google.maps.event.addListener(currentMap.instance, 'click', function(event){
+    session.set('latLng', {lat: event.latLng.lat(), lng: event.latLng.lng()});
     addMarker(markerArgs.mapKey, event.latLng.lat(), event.latLng.lng(), markerArgs._id, markerArgs.title);
   });
 };
@@ -137,17 +140,20 @@ var getMap = function(mapKey){
 
 var getMarkerProperties = function(markerId){
   var markerProperties = {};
-  markers.forEach(function(marker){
-    if(marker._id == markerId){
-      markerProperties = {
-        lat: marker.getPosition().lat(),
-        lng: marker.getPosition().lng(),
-        idref: marker._id,
-        title: marker.title
-      };
-    }
-  });
-  return markerProperties;
+  if(markers){
+    markers.forEach(function(marker){
+      if(marker._id == markerId){
+        markerProperties = {
+          lat: marker.getPosition().lat(),
+          lng: marker.getPosition().lng(),
+          idref: marker._id,
+          title: marker.title
+        };
+      }
+    });
+    if(markerProperties) return markerProperties;
+  }
+  return null;
 };
 
 module.exports = {

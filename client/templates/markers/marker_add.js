@@ -7,9 +7,10 @@ var markerErrorKey = "markerError";
 
 var notHidden = "notHidden";
 
-var color = "color";
+var submitMarkerSuccess = "submitMarkerSuccess";
 
-var text = "text";
+var submitMarkerError = "submitMarkerError";
+
 
 
 Template.markerAdd.helpers({
@@ -20,18 +21,27 @@ Template.markerAdd.helpers({
     return session.get(notHidden);
   },
   color: function(){
-    return session.get(color);
+    if(session.get(submitMarkerSuccess))  return 'background: #6D6; color: #111; font-weight: bold;';
+    if(session.get(submitMarkerError))    return 'background: #D66; color: #111; font-weight: bold;';
   },
   text: function(){
-    return session.get(text);
+    if(session.get(submitMarkerSuccess))  return 'Votre évenement a bien été enregistré!';
+    if(session.get(submitMarkerError))    return "Le tag que vous avez mentionné n'existe pas!";
+  },
+  coorGps: function(){
+    var latLng = session.get('latLng');
+    if(latLng) return 'Latitude: '+latLng.lat+' Longitude: '+latLng.lng;
+    return null;
   }
 });
 
 Template.markerAdd.onCreated(function(){
   session.clear(markerErrorKey);
   session.clear(notHidden);
-  session.clear(color);
-  session.clear(text);
+  session.clear(submitMarkerSuccess);
+  session.clear(submitMarkerError);
+  session.clear('latLng');
+  session.set('mapKey', 'clickableMap');
 });
 
 var printErrorMessage = function(field){
@@ -60,43 +70,56 @@ Template.markerAdd.events({
 });
 
 var getData = function(e,t){
-    //getName
-  var name = $(e.target).find('[id=name]').val().toLowerCase();
-  name = name.replace(' ','');
+    //getDescription
+  var description = $(e.target).find('[id=description]').val().toLowerCase();
+  description = description.replace(' ','');
     //getTag
   var tag = $(e.target).find('[id=tag]').val().toLowerCase();
   tag = tag.replace(' ','');
+    //getDate
+  var date;
+  var beginHour = $(e.target).find('[id=beginHour]').val();
+  var endHour = $(e.target).find('[id=endHour]').val();
+  date = getDate(e);
+  console.log(date+' '+beginHour+' '+endHour);
     //getPos
   var markerProperties = mapCtrl.getMarkerProperties(markerId);
-  var x = markerProperties.lat;
-  var y = markerProperties.lng;
-  if(isNaN(x)){
-    x='';
+  var lat = markerProperties.lat;
+  var lng = markerProperties.lng;
+  if(isNaN(lng)){
+    lat='';
   }
-  if(isNaN(y)){
-    y='';
+  if(isNaN(lng)){
+    lng='';
   }
-  return {name: name, tag: tag, x: x, y: y};
+  return {description: description, tag: tag, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng};
 };
 
+var getDate = function(e){
+  var year = parseInt($(e.target).find('[id=year]').val());
+  var month = parseInt($(e.target).find('[id=month]').val())-1; //-1 because months start to 0
+  var day = parseInt($(e.target).find('[id=day]').val());
+  console.log(year+' '+month+' '+day)
+  return new Date(year, month, day);
+}
+
 var controlData = function(data, markerError){
-  if(data.name == '')               markerError.name = 'Veuillez entrer un nom!';
-  if(data.tag == '')                markerError.tag = 'Veuillez entrer un tag!';
-  if(data.x == '' || data.y == '')  markerError.mapPos = 'veuillez sélectionner un lieu!';
+  if(data.description == '')                                            markerError.description = 'Veuillez entrer une description!';
+  if(data.tag == '')                                                    markerError.tag = 'Veuillez entrer un tag!';
+  if(data.date == null || data.beginHour == '' || data.endHour == '')   markerError.date = 'Veillez entrer une date valide!'
+  if(data.lat == '' || data.lng == '')                                  markerError.mapPos = 'veuillez sélectionner un lieu!';
   return Object.getOwnPropertyNames(markerError).length === 0;
 };
 
 var markerAdd = function(data){
-  Meteor.call('markerAdd', {name: data.name, tag: data.tag, x: data.x, y: data.y}, function(e,r){
+  Meteor.call('markerAdd', {description: data.description, tag: data.tag, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng}, function(e,r){
     session.set(notHidden, true);
     if(typeof e == 'undefined'){
       session.clear(markerErrorKey);
-      session.set(color, 'background: #6D6; color: #111; font-weight: bold;');
-      session.set(text, 'Votre évenement a bien été enregistré!')
+      session.set(submitMarkerSuccess, true);
     }else{
       console.log(e);
-      session.set(color, 'background: #D66; color: #111; font-weight: bold;')
-      session.set(text, "Le tag que vous avez mentionné n'existe pas!")
+      session.set(submitMarkerError, true);
     }
   });
 };

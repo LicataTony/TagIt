@@ -17,6 +17,10 @@ Meteor.publish('singleTag', function(name) {
 Meteor.publish('markersByTag', function(name) {
   return Markers.find({tag: name});
 });
+
+Meteor.publish('markersAll', function(name) {
+  return Markers.find();
+});
 /*
 Meteor.publish('personnesList', function() {
   var argRequest =    {$and: [
