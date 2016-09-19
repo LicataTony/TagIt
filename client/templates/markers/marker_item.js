@@ -1,5 +1,5 @@
 Template.markerItem.helpers({
-  description: function(){
+  name: function(){
     return this.name;
   },
   tag: function(){
