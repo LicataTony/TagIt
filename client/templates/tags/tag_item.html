@@ -1,6 +1,7 @@
 <Template name="tagItem">
   <p>
     <a href="{{pathFor 'tagPage'}}">#{{tagName}}</a>
+    <input class="btn list" type="button" value="Liste"/>
     {{#if isAdmin}}
       <div class="tagItemOptions">
         <div class="private-text">{{private}}</div>

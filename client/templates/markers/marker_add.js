@@ -92,7 +92,7 @@ var getData = function(e,t){
   if(isNaN(lng)) lng='';
 
     //getLocation
-  var location = $(e.target).find('[data-geo=lat]').val();
+  var location = $(e.target).find('[data-geo=formatted-address]').val();
 
     //getTags
   var tags = $(e.target).find('[id=tagsName]').val().toLowerCase();

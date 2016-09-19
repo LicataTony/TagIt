@@ -16,10 +16,7 @@ Template.markerItem.helpers({
   hours: function(){
     return this.beginHour+' - '+this.endHour;
   },
-  lat: function(){
-    return this.lat;
-  },
-  lng: function(){
-    return this.lng;
+  location: function(){
+    return this.location;
   }
 });
