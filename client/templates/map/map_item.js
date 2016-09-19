@@ -52,11 +52,11 @@ var loadExistingMarkers = function(markers){
 };
 
 var pushMarkerOnMap = function(markerProperties){
-  var label = markerProperties.description.charAt(0);
+  var label = markerProperties.name.charAt(0);
   var lat = markerProperties.lat;
   var lng = markerProperties.lng;
   var idref = markerProperties._id;
-  var title = markerProperties.description;
+  var title = markerProperties.name;
 
   var marker = mapCtrl.addMarker(mapKey, lat , lng , idref , title);
 

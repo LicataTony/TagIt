@@ -11,7 +11,17 @@ var submitMarkerSuccess = "submitMarkerSuccess";
 
 var submitMarkerError = "submitMarkerError";
 
-
+Template.markerAdd.onRendered(function() {
+  this.autorun(function () {
+    if (GoogleMaps.loaded()) {
+        // Trigger geocoding request.
+        $("#lieu").geocomplete({
+          details: ".geoloc" ,
+          detailsAttribute: "data-geo"
+        });
+    }
+  });
+});
 
 Template.markerAdd.helpers({
   errorMessage: function(field){
@@ -32,6 +42,10 @@ Template.markerAdd.helpers({
     var latLng = session.get('latLng');
     if(latLng) return 'Latitude: '+latLng.lat+' Longitude: '+latLng.lng;
     return null;
+  },
+  tagParam: function(){
+    var tagParam = Router.current().params.tag;
+    return tagParam == undefined ? "" : tagParam;
   }
 });
 
@@ -55,6 +69,7 @@ var printErrorMessage = function(field){
 
 Template.markerAdd.events({
   'submit form': function(e) {
+    $("#lieu").trigger("geocode");
     e.preventDefault();
 
     var data = getData(e);
@@ -70,27 +85,34 @@ Template.markerAdd.events({
 });
 
 var getData = function(e,t){
-    //getDescription
-  var description = $(e.target).find('[id=description]').val().toLowerCase();
-  description = description.replace(' ','');
+    //getPos
+  var lat = parseFloat($(e.target).find('[data-geo=lat]').val());
+  var lng = parseFloat($(e.target).find('[data-geo=lng]').val());
+  if(isNaN(lat)) lat='';
+  if(isNaN(lng)) lng='';
+
+    //getLocation
+  var location = $(e.target).find('[data-geo=lat]').val();
+
     //getTags
   var tags = $(e.target).find('[id=tagsName]').val().toLowerCase();
   tagsArray = tags.split(" ");
+
     //getDate
   var date = getDate(e);
   var beginHour = $(e.target).find('[id=beginHour]').val();
   var endHour = $(e.target).find('[id=endHour]').val();
-    //getPos
-  var markerProperties = mapCtrl.getMarkerProperties(markerId);
-  var lat = markerProperties.lat;
-  var lng = markerProperties.lng;
-  if(isNaN(lng)){
-    lat='';
-  }
-  if(isNaN(lng)){
-    lng='';
-  }
-  return {description: description, tagsArray: tagsArray, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng};
+
+    //getName
+  var name = $(e.target).find('[id=name]').val();
+
+    //getUrl
+  var url = $(e.target).find('[id=url]').val();
+
+    //getDescription
+  var description = $(e.target).find('[id=description]').val();
+
+  return {tagsArray: tagsArray, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng, location: location, name: name, url: url, description: description};
 };
 
 var getDate = function(e){
@@ -101,15 +123,15 @@ var getDate = function(e){
 }
 
 var controlData = function(data, markerError){
-  if(data.description == '')                                            markerError.description = 'Veuillez entrer une description!';
   if(data.tagsArray.length == 0)                                        markerError.tags = 'Veuillez entrer au moins un tag!';
   if(data.date == null || data.beginHour == '' || data.endHour == '')   markerError.date = 'Veuillez entrer une date valide!';
-  if(data.lat == '' || data.lng == '')                                  markerError.mapPos = 'veuillez sélectionner un lieu!';
+  if(data.lat == '' || data.lng == '' || data.location == '')           markerError.mapPos = 'veuillez entrer un lieu!';
+  if(data.name == '')                                                   markerError.name = 'veuillez entrer un nom!';
   return Object.getOwnPropertyNames(markerError).length === 0;
 };
 
 var markerAdd = function(data){
-  Meteor.call('markerAdd', {description: data.description, tagsArray: data.tagsArray, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng}, function(e,r){
+  Meteor.call('markerAdd', {tagsArray: data.tagsArray, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng, location: data.location, name: data.name, url: data.url, description: data.description}, function(e,r){
     session.set(notHidden, true);
     if(typeof e == 'undefined'){
       session.clear(markerErrorKey);

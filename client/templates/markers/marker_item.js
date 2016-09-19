@@ -1,6 +1,6 @@
 Template.markerItem.helpers({
   description: function(){
-    return this.description;
+    return this.name;
   },
   tag: function(){
     var tags = '';

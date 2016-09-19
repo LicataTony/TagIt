@@ -6,17 +6,24 @@
       </div>
     {{/if}}
     <form>
-      <label class="control-label" for="description">Description</label>
-        <div class="controls">
-          <input name="description" id="description" type="text" value="testEvent2312311" placeholder="Description de l'évenement" class="form-control"/>
-          <span class="help-block">{{errorMessage 'description'}}</span>
+      <label class="control-label" for="lieu">lieu *</label>
+        <div class="controls" >
+          <input name="lieu" id="lieu" type="text" value="" placeholder="Lieu de l'évenement" class="form-control"/>
+          <span class="help-block">{{errorMessage 'lieu'}}</span>
+
+              <!-- geoloc hidden inputs -->
+            <div class="geoloc">
+              <input class="hidden" data-geo="lat" value="" />
+              <input class="hidden" data-geo="lng" value="" />
+              <input class="hidden" data-geo="formatted_address" value="" />
+            </div>
         </div>
-      <label class="control-label" for="tagsName">Tags</label>
+      <label class="control-label" for="tagsName">Tags *</label>
         <div class="controls">
-          <input name="tagsName" id="tagsName" type="text" value="testtag1" placeholder="Vos tags (séparez-les avec un espace)" class="form-control"/>
+          <input name="tagsName" id="tagsName" type="text" value={{tagParam}} placeholder="Vos tags (séparez-les avec un espace)" class="form-control"/>
           <span class="help-block">{{errorMessage 'tags'}}</span>
         </div>
-        <label class="control-label" for="date">Date et heure</label>
+        <label class="control-label" for="date">Date et heure *</label>
           <div class="controls">
             <div class="form-inline">
               Date:
@@ -29,9 +36,24 @@
             </div>
             <span class="help-block">{{errorMessage 'dates'}}</span>
           </div>
-      <label class="control-label">Coordonées GPS {{coorGps}}</label>
+        <label class="control-label" for="name">Nom *</label>
+          <div class="controls">
+            <input name="name" id="name" type="text" value="" placeholder="Nom de l'évenemenet / de votre entreprise" class="form-control"/>
+            <span class="help-block">{{errorMessage 'name'}}</span>
+          </div>
+        <label class="control-label" for="url">Url</label>
+          <div class="controls">
+            <input name="url" id="url" type="text" value="" placeholder="lien internet référant votre entreprise" class="form-control"/>
+            <span class="help-block">{{errorMessage 'url'}}</span>
+          </div>
+        <label class="control-label" for="description">Description</label>
+          <div class="controls">
+            <input name="description" id="description" type="text" value="" placeholder="Description de votre entreprise" class="form-control"/>
+            <span class="help-block">{{errorMessage 'description'}}</span>
+          </div>
+      <!--<label class="control-label">Coordonées GPS {{coorGps}}</label>
         {{> mapItem}}
-        <span class="help-block">{{errorMessage 'mapPos'}}</span>
+        <span class="help-block">{{errorMessage 'mapPos'}}</span> -->
       <input type="submit" value="Submit" class="btn btn-primary"/>
     </form>
   </div>
