@@ -51,9 +51,15 @@
             <input name="description" id="description" type="text" value="" placeholder="Description de votre entreprise" class="form-control"/>
             <span class="help-block">{{errorMessage 'description'}}</span>
           </div>
-      <!--<label class="control-label">Coordonées GPS {{coorGps}}</label>
-        {{> mapItem}}
-        <span class="help-block">{{errorMessage 'mapPos'}}</span> -->
+          <!--TODO lib image-->
+        <label class="control-label">Ajoutez une image (10MB max)</label>
+          {{#with currentUpload}}
+            Uploading <b>{{file.name}}</b>:
+            <span id="progress">{{progress.get}}%</span>
+          {{else}}
+            <input id="fileInput" type="file" />
+          {{/with}}
+          <br>
       <input type="submit" value="Submit" class="btn btn-primary"/>
     </form>
   </div>

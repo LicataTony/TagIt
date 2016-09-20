@@ -27,6 +27,12 @@ Meteor.publish('markersByTag', function(tagName) {
 Meteor.publish('markersAll', function() {
   return Markers.find();
 });
+
+//TODO lib image
+Meteor.publish('files.images.all', function () {
+    return Images.find().cursor;
+});
+
 /*
 Meteor.publish('personnesList', function() {
   var argRequest =    {$and: [

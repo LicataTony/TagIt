@@ -18,5 +18,10 @@ Template.markerItem.helpers({
   },
   location: function(){
     return this.location;
+  },
+  imageFile: function(){
+    var image = Images.findOne(this.imageId); // tagname : params.tagname, id_marker : this._id 
+    console.log(image);
+    return image;
   }
 });

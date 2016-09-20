@@ -11,6 +11,8 @@ var submitMarkerSuccess = "submitMarkerSuccess";
 
 var submitMarkerError = "submitMarkerError";
 
+var currentUploadedFileId;
+
 Template.markerAdd.onRendered(function() {
   this.autorun(function () {
     if (GoogleMaps.loaded()) {
@@ -46,6 +48,10 @@ Template.markerAdd.helpers({
   tagParam: function(){
     var tagParam = Router.current().params.tag;
     return tagParam == undefined ? "" : tagParam;
+  },
+  currentUpload: function () {
+    console.log(Template.instance());
+    return Template.instance().currentUpload.get();
   }
 });
 
@@ -56,6 +62,7 @@ Template.markerAdd.onCreated(function(){
   session.clear(submitMarkerError);
   session.clear('latLng');
   session.set('mapKey', 'clickableMap');
+  this.currentUpload = new ReactiveVar(false);
 });
 
 var printErrorMessage = function(field){
@@ -68,7 +75,7 @@ var printErrorMessage = function(field){
 };
 
 Template.markerAdd.events({
-  'submit form': function(e) {
+  'submit form': function(e,t) {
     $("#lieu").trigger("geocode");
     e.preventDefault();
 
@@ -81,6 +88,34 @@ Template.markerAdd.events({
     }else{
       displayErrorMessage(markerError);
     }
+  },
+  'change #fileInput': function (e, template) {
+    //TODO lib image
+    if (e.currentTarget.files && e.currentTarget.files[0]) {
+      // We upload only one file, in case
+      // multiple files were selected
+      var upload = Images.insert({            // lib
+        file: e.currentTarget.files[0],
+        streams: 'dynamic',
+        chunkSize: 'dynamic'
+      }, false);
+
+      upload.on('start', function () {
+        template.currentUpload.set(this);
+      });
+
+      upload.on('end', function (error, fileObj) {
+        if (error) {
+          alert('Error during upload: ' + error);
+        } else {
+          alert('File "' + fileObj.name + '" successfully uploaded');
+          currentUploadedFileId = fileObj._id;
+        }
+        //template.currentUpload.set(false);
+      });
+
+      upload.start();
+    }
   }
 });
 
@@ -92,7 +127,7 @@ var getData = function(e,t){
   if(isNaN(lng)) lng='';
 
     //getLocation
-  var location = $(e.target).find('[data-geo=formatted-address]').val();
+  var location = $(e.target).find('[data-geo=formatted_address]').val();
 
     //getTags
   var tags = $(e.target).find('[id=tagsName]').val().toLowerCase();
@@ -112,8 +147,14 @@ var getData = function(e,t){
     //getDescription
   var description = $(e.target).find('[id=description]').val();
 
-  return {tagsArray: tagsArray, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng, location: location, name: name, url: url, description: description};
+  //TODO lib image
+    //getImage
+  var imageId = '';
+  if(currentUploadedFileId) imageId = currentUploadedFileId;
+
+  return {tagsArray: tagsArray, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng, location: location, name: name, url: url, description: description, imageId: imageId};
 };
+
 
 var getDate = function(e){
   var year = parseInt($(e.target).find('[id=year]').val());
@@ -131,7 +172,7 @@ var controlData = function(data, markerError){
 };
 
 var markerAdd = function(data){
-  Meteor.call('markerAdd', {tagsArray: data.tagsArray, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng, location: data.location, name: data.name, url: data.url, description: data.description}, function(e,r){
+  Meteor.call('markerAdd', {tagsArray: data.tagsArray, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng, location: data.location, name: data.name, url: data.url, description: data.description, imageId: data.imageId}, function(e,r){
     session.set(notHidden, true);
     if(typeof e == 'undefined'){
       session.clear(markerErrorKey);

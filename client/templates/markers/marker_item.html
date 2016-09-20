@@ -5,7 +5,11 @@
       <b>Tags:</b> {{tag}} <br>
       <b>Date:</b> {{date}} <br>
       <b>Horaires:</b> {{hours}} <br>
-      <b>Adresse:</b> {{location}}
+      <b>Adresse:</b> {{location}} <br>
+      <!--TODO lib image-->
+      {{#if imageFile}}
+      <img class="marker-image" src={{imageFile.link}} />
+      {{/if}}
     </p>
   </div>
 </Template>

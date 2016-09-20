@@ -10,14 +10,15 @@ Meteor.methods({
       location: String,
       name: String,
       url: String,
-      description: String
+      description: String,
+      imageId: String
     });
     var ok = true;
     markerDatas.tagsArray.forEach(function(tagName){
       if(!Tags.findOne({tagName: tagName}) || !Tags.findOne({tagName: tagName}).approved) ok = false;
     });
     if(ok){
-      Markers.insert({tagsArray: markerDatas.tagsArray, date: markerDatas.date, beginHour: markerDatas.beginHour, endHour: markerDatas.endHour, lat: markerDatas.lat, lng: markerDatas.lng, location: markerDatas.location, name: markerDatas.name, url: markerDatas.url, Description: markerDatas.description});
+      Markers.insert({tagsArray: markerDatas.tagsArray, date: markerDatas.date, beginHour: markerDatas.beginHour, endHour: markerDatas.endHour, lat: markerDatas.lat, lng: markerDatas.lng, location: markerDatas.location, name: markerDatas.name, url: markerDatas.url, description: markerDatas.description, imageId: markerDatas.imageId});
     }else{
       throw new Meteor.Error('invalide-tag', "This tag doesn't exist!");
     }
