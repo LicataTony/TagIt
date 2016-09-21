@@ -10,6 +10,10 @@ Template.tagsList.helpers({
     }
   }
 });
+// only text
+Template.tagsList.helpers({
+  searchTagText: function(){return TAPi18n.__('searchTag',"",'fr');}
+});
 
 Template.tagsList.events({
   'keyup #searchInput': function (evt, template) {

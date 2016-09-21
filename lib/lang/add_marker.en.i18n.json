@@ -1,0 +1,7 @@
+{
+  "place" : "Place",
+  "eventPlace" : "Where will the event happen",
+  "tags" : "Tags",
+  "tagsPlaceholder" : "Your tags (separated with a space)",
+  "datehour" : "Date and hours"
+}

@@ -6,9 +6,9 @@
       </div>
     {{/if}}
     <form>
-      <label class="control-label" for="lieu">lieu *</label>
+      <label class="control-label" for="lieu">{{_ 'place'}} *</label>
         <div class="controls" >
-          <input name="lieu" id="lieu" type="text" value="" placeholder="Lieu de l'évenement" class="form-control"/>
+          <input name="lieu" id="lieu" type="text" value="" placeholder="{{_ 'eventPlace'}}" class="form-control"/>
           <span class="help-block">{{errorMessage 'lieu'}}</span>
 
               <!-- geoloc hidden inputs -->
@@ -18,12 +18,12 @@
               <input class="hidden" data-geo="formatted_address" value="" />
             </div>
         </div>
-      <label class="control-label" for="tagsName">Tags *</label>
+      <label class="control-label" for="tagsName">{{_ 'tags'}} *</label>
         <div class="controls">
-          <input name="tagsName" id="tagsName" type="text" value={{tagParam}} placeholder="Vos tags (séparez-les avec un espace)" class="form-control"/>
+          <input name="tagsName" id="tagsName" type="text" value="" placeholder="{{_ 'tagsPlaceholder'}}" class="form-control"/>
           <span class="help-block">{{errorMessage 'tags'}}</span>
         </div>
-        <label class="control-label" for="date">Date et heure *</label>
+        <label class="control-label" for="date">{{_ 'datehour'}} *</label>
           <div class="controls">
             <div class="form-inline">
               Date:
@@ -60,6 +60,11 @@
             <input id="fileInput" type="file" />
           {{/with}}
           <br>
+          {{#if currentUploadedFileId}}
+            <img src="{{currentImage.link}}" class="marker-image"/>
+            <input type="button" class="btn reset-image" value="Supprimer l'image choisie"/>
+            <br><br>
+          {{/if}}
       <input type="submit" value="Submit" class="btn btn-primary"/>
     </form>
   </div>

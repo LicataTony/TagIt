@@ -1,5 +1,6 @@
 import * as mapCtrl from '/client/lib/map';
 import * as session from '/client/lib/session';
+import * as cookie from '/client/lib/cookie';
 
 var markerId = "clickableMarker";
 
@@ -11,7 +12,7 @@ var submitMarkerSuccess = "submitMarkerSuccess";
 
 var submitMarkerError = "submitMarkerError";
 
-var currentUploadedFileId;
+var currentUploadedFileId = "currentUploadedFileId";
 
 Template.markerAdd.onRendered(function() {
   this.autorun(function () {
@@ -23,6 +24,7 @@ Template.markerAdd.onRendered(function() {
         });
     }
   });
+  fillPreferences();
 });
 
 Template.markerAdd.helpers({
@@ -50,8 +52,13 @@ Template.markerAdd.helpers({
     return tagParam == undefined ? "" : tagParam;
   },
   currentUpload: function () {
-    console.log(Template.instance());
     return Template.instance().currentUpload.get();
+  },
+  currentUploadedFileId: function(){
+    return session.get(currentUploadedFileId);
+  },
+  currentImage: function(){
+    return Images.findOne(session.get(currentUploadedFileId));
   }
 });
 
@@ -89,6 +96,9 @@ Template.markerAdd.events({
       displayErrorMessage(markerError);
     }
   },
+  'click .reset-image': function(){
+    session.clear(currentUploadedFileId);
+  },
   'change #fileInput': function (e, template) {
     //TODO lib image
     if (e.currentTarget.files && e.currentTarget.files[0]) {
@@ -108,16 +118,49 @@ Template.markerAdd.events({
         if (error) {
           alert('Error during upload: ' + error);
         } else {
+          session.set(currentUploadedFileId, fileObj._id);
           alert('File "' + fileObj.name + '" successfully uploaded');
-          currentUploadedFileId = fileObj._id;
         }
-        //template.currentUpload.set(false);
+        template.currentUpload.set(false);
       });
 
       upload.start();
     }
   }
 });
+
+var setPreferences = function(data){
+  cookie.set('tagsArray', data.tagsArray);
+  cookie.set('name', data.name);
+  cookie.set('url', data.url);
+  cookie.set('description', data.description);
+  cookie.set('imageId', data.imageId);
+};
+
+var fillPreferences = function(){
+  var prefTags = Router.current().params.tag == undefined ? "" : Router.current().params.tag+' ';
+  var tagsArray = cookie.get('tagsArray').replace(/,/g,' ');
+  if(tagsArray){
+    tagsArray.split(" ").forEach(function(tagName){
+      var exist = false;
+      prefTags.split(" ").forEach(function(existingTag){
+        if(existingTag == tagName) exist = true;
+      })
+      if(!exist) prefTags += tagName.replace(/,/g,'')+' ';
+    });
+  }
+  $('#tagsName').val(prefTags);
+  $('#name').val(cookie.get('name'));
+  $('#url').val(cookie.get('url'));
+  $('#description').val(cookie.get('description'));
+  session.set(currentUploadedFileId, cookie.get('imageId'));
+  /*
+  $(e.target).find('[id=tagsName]').val(prefTags);
+  $(e.target).find('[id=name]').val(cookie.get('name'));
+  $(e.target).find('[id=url]').val(cookie.get('url'));
+  $(e.target).find('[id=description]').val(cookie.get('description'));
+  */
+}
 
 var getData = function(e,t){
     //getPos
@@ -132,6 +175,11 @@ var getData = function(e,t){
     //getTags
   var tags = $(e.target).find('[id=tagsName]').val().toLowerCase();
   tagsArray = tags.split(" ");
+  var tagsArrayWithoutVoid = [];
+  tagsArray.forEach(function(tag){
+    if(tag != '') tagsArrayWithoutVoid.push(tag);
+  });
+  tagsArray = tagsArrayWithoutVoid;
 
     //getDate
   var date = getDate(e);
@@ -150,7 +198,7 @@ var getData = function(e,t){
   //TODO lib image
     //getImage
   var imageId = '';
-  if(currentUploadedFileId) imageId = currentUploadedFileId;
+  if(session.get(currentUploadedFileId)) imageId = session.get(currentUploadedFileId);
 
   return {tagsArray: tagsArray, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng, location: location, name: name, url: url, description: description, imageId: imageId};
 };
@@ -178,6 +226,7 @@ var markerAdd = function(data){
       session.clear(markerErrorKey);
       session.set(submitMarkerError, false);
       session.set(submitMarkerSuccess, true);
+      setPreferences(data);
     }else{
       console.log(e);
       session.set(submitMarkerSuccess, false);
