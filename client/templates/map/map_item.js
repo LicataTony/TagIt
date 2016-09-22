@@ -3,17 +3,17 @@ import * as session from '/client/lib/session';
 
 var mapKey;
 
-var markers;
+var pins;
 
-var markersArgs;
+var pinsArgs;
 
 Template.mapItem.onRendered(function () {
-  markerArgs = {
-    _id: "clickableMarker",
-    title: "clickableMarker",
+  pinArgs = {
+    _id: "clickablePin",
+    title: "clickablePin",
     mapKey: mapKey
   }
-  if(mapKey=='visualMap') markers = Markers.find();
+  if(mapKey=='visualMap') pins = Pins.find();
 
   initMap();
 });
@@ -34,31 +34,31 @@ Template.mapItem.helpers({
 
 function initMap() {
   mapCtrl.load({key: 'AIzaSyA_94HLT95IdrUPGeHJH5tzOMggVUQ-MfQ'});
-  //initMarkers();
+  //initPins();
   mapCtrl.ready(mapKey, finishInitMap);
 };
 
 var finishInitMap = function(map) {
-  // Add a marker to the map once it's ready
+  // Add a pin to the map once it's ready
   mapCtrl.setMap(mapKey, map);
-  if(mapKey=='clickableMap')  mapCtrl.addMapClickListener(markerArgs);
-  if(mapKey=='visualMap')     loadExistingMarkers(markers);
+  if(mapKey=='clickableMap')  mapCtrl.addMapClickListener(pinArgs);
+  if(mapKey=='visualMap')     loadExistingPins(pins);
 };
 
-var loadExistingMarkers = function(markers){
-  markers.forEach(function(marker){
-    pushMarkerOnMap(marker);
+var loadExistingPins = function(pins){
+  pins.forEach(function(pin){
+    pushPinOnMap(pin);
   });
 };
 
-var pushMarkerOnMap = function(markerProperties){
-  var label = markerProperties.name.charAt(0);
-  var lat = markerProperties.lat;
-  var lng = markerProperties.lng;
-  var idref = markerProperties._id;
-  var title = markerProperties.name;
+var pushPinOnMap = function(pinProperties){
+  var label = pinProperties.name.charAt(0);
+  var lat = pinProperties.lat;
+  var lng = pinProperties.lng;
+  var idref = pinProperties._id;
+  var title = pinProperties.name;
 
-  var marker = mapCtrl.addMarker(mapKey, lat , lng , idref , title);
+  var pin = mapCtrl.addPin(mapKey, lat , lng , idref , title);
 
   var listener = function() {
     session.set(personne._id, 'orange');
@@ -67,15 +67,15 @@ var pushMarkerOnMap = function(markerProperties){
   //mapCtrl.addClickListener(personne._id, listener);
 };
 
-var deleteMarkerOnMap = function(oldMarker){
-  mapCtrl.deleteMarker(oldMarker._id);
+var deletePinOnMap = function(oldPin){
+  mapCtrl.deletePin(oldPin._id);
 };
 
-var markerChanged = function(id, fieldsChanged){
+var pinChanged = function(id, fieldsChanged){
   if(fieldsChanged.loc) {
-    mapCtrl.updateSettingMarker(id,'loc',fieldsChanged.loc);
+    mapCtrl.updateSettingPin(id,'loc',fieldsChanged.loc);
   }
   if(fieldsChanged.name) {
-    mapCtrl.updateSettingMarker(id,'title',fieldsChanged.name);
+    mapCtrl.updateSettingPin(id,'title',fieldsChanged.name);
   }
 };

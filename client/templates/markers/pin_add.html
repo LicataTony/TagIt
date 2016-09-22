@@ -1,5 +1,5 @@
-<Template name="markerAdd">
-  <div class="marker-add">
+<Template name="pinAdd">
+  <div class="pin-add">
     {{#if notHidden}}
       <div class="well" style={{color}}>
         <p>{{text}}</p>
@@ -27,9 +27,9 @@
           <div class="controls">
             <div class="form-inline">
               Date:
-              <input name="year" id="year" type="text" value="2016" placeholder="YYYY (année)" class="form-control marker-date" maxlength="4"/>
-              <input name="month" id="month" type="text" value="11" placeholder="MM (mois)" class="form-control marker-date" maxlength="2"/>
-              <input name="day" id="day" type="text" value="19" placeholder="DD (jour)" class="form-control marker-date" maxlength="2"/>
+              <input name="year" id="year" type="text" value="2016" placeholder="YYYY (année)" class="form-control pin-date" maxlength="4"/>
+              <input name="month" id="month" type="text" value="11" placeholder="MM (mois)" class="form-control pin-date" maxlength="2"/>
+              <input name="day" id="day" type="text" value="19" placeholder="DD (jour)" class="form-control pin-date" maxlength="2"/>
               Heures:
               <input name="beginHour" id="beginHour" type="text" value="18:00" placeholder="HH:MM (début)" class="form-control"/>
               <input name="endHour" id="endHour" type="text" value="24:00" placeholder="HH:MM (fin)" class="form-control"/>
@@ -61,7 +61,7 @@
           {{/with}}
           <br>
           {{#if currentUploadedFileId}}
-            <img src="{{currentImage.link}}" class="marker-image"/>
+            <img src="{{currentImage.link}}" class="pin-image"/>
             <input type="button" class="btn reset-image" value="Supprimer l'image choisie"/>
             <br><br>
           {{/if}}

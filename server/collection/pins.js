@@ -1,6 +1,6 @@
 Meteor.methods({
-  markerAdd: function(markerDatas){
-    check(markerDatas, {
+  pinAdd: function(pinDatas){
+    check(pinDatas, {
       tagsArray: Array,
       date: Date,
       beginHour: String,
@@ -14,11 +14,12 @@ Meteor.methods({
       imageId: String
     });
     var ok = true;
-    markerDatas.tagsArray.forEach(function(tagName){
+    pinDatas.tagsArray.forEach(function(tagName){
       if(!Tags.findOne({tagName: tagName}) || !Tags.findOne({tagName: tagName}).approved) ok = false;
     });
     if(ok){
-      Markers.insert({tagsArray: markerDatas.tagsArray, date: markerDatas.date, beginHour: markerDatas.beginHour, endHour: markerDatas.endHour, lat: markerDatas.lat, lng: markerDatas.lng, location: markerDatas.location, name: markerDatas.name, url: markerDatas.url, description: markerDatas.description, imageId: markerDatas.imageId});
+      // Pins.insert(pinDatas);
+      Pins.insert({tagsArray: pinDatas.tagsArray, date: pinDatas.date, beginHour: pinDatas.beginHour, endHour: pinDatas.endHour, lat: pinDatas.lat, lng: pinDatas.lng, location: pinDatas.location, name: pinDatas.name, url: pinDatas.url, description: pinDatas.description, imageId: pinDatas.imageId});
     }else{
       throw new Meteor.Error('invalide-tag', "This tag doesn't exist!");
     }

@@ -19,7 +19,7 @@ Template.tagItem.events({
     Meteor.call('tagApprove', {id: this._id, approved: ($(event.target).is(":checked"))});
   },
   'click .list': function(){
-    Router.go('markerTagList', {tagName: this.tagName});
+    Router.go('pinTagList', {tagName: this.tagName});
   },
   'click .delete': function(){
     Meteor.call('tagDelete', this._id);

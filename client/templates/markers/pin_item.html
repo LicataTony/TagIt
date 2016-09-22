@@ -1,4 +1,4 @@
-<Template name="markerItem">
+<Template name="pinItem">
   <div class="well">
     <p>
       <b>Nom:</b> {{name}} <br>
@@ -8,7 +8,7 @@
       <b>Adresse:</b> {{location}} <br>
       <!--TODO lib image-->
       {{#if imageFile}}
-      <img class="marker-image" src={{imageFile.link}} />
+      <img class="pin-image" src={{imageFile.link}} />
       {{/if}}
     </p>
   </div>

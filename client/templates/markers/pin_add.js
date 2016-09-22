@@ -2,19 +2,19 @@ import * as mapCtrl from '/client/lib/map';
 import * as session from '/client/lib/session';
 import * as cookie from '/client/lib/cookie';
 
-var markerId = "clickableMarker";
+var pinId = "clickablePin";
 
-var markerErrorKey = "markerError";
+var pinErrorKey = "pinError";
 
 var notHidden = "notHidden";
 
-var submitMarkerSuccess = "submitMarkerSuccess";
+var submitPinSuccess = "submitPinSuccess";
 
-var submitMarkerError = "submitMarkerError";
+var submitPinError = "submitPinError";
 
 var currentUploadedFileId = "currentUploadedFileId";
 
-Template.markerAdd.onRendered(function() {
+Template.pinAdd.onRendered(function() {
   this.autorun(function () {
     if (GoogleMaps.loaded()) {
         // Trigger geocoding request.
@@ -27,7 +27,7 @@ Template.markerAdd.onRendered(function() {
   fillPreferences();
 });
 
-Template.markerAdd.helpers({
+Template.pinAdd.helpers({
   errorMessage: function(field){
     return printErrorMessage(field);
   },
@@ -35,12 +35,12 @@ Template.markerAdd.helpers({
     return session.get(notHidden);
   },
   color: function(){
-    if(session.get(submitMarkerSuccess))  return 'background: #6D6; color: #111; font-weight: bold;';
-    if(session.get(submitMarkerError))    return 'background: #D66; color: #111; font-weight: bold;';
+    if(session.get(submitPinSuccess))  return 'background: #6D6; color: #111; font-weight: bold;';
+    if(session.get(submitPinError))    return 'background: #D66; color: #111; font-weight: bold;';
   },
   text: function(){
-    if(session.get(submitMarkerSuccess))  return 'Votre évenement a bien été enregistré!';
-    if(session.get(submitMarkerError))    return "Un ou plusieurs des tags que vous avez mentionné n'existe pas ou ne sont pas approuvés par l'administrateur!";
+    if(session.get(submitPinSuccess))  return 'Votre évenement a bien été enregistré!';
+    if(session.get(submitPinError))    return "Un ou plusieurs des tags que vous avez mentionné n'existe pas ou ne sont pas approuvés par l'administrateur!";
   },
   coorGps: function(){
     var latLng = session.get('latLng');
@@ -62,38 +62,38 @@ Template.markerAdd.helpers({
   }
 });
 
-Template.markerAdd.onCreated(function(){
-  session.clear(markerErrorKey);
+Template.pinAdd.onCreated(function(){
+  session.clear(pinErrorKey);
   session.clear(notHidden);
-  session.clear(submitMarkerSuccess);
-  session.clear(submitMarkerError);
+  session.clear(submitPinSuccess);
+  session.clear(submitPinError);
   session.clear('latLng');
   session.set('mapKey', 'clickableMap');
   this.currentUpload = new ReactiveVar(false);
 });
 
 var printErrorMessage = function(field){
-  var markerError = session.get(markerErrorKey);
-  if(markerError!=null){
-    if(markerError[field]!=null){
-      return markerError[field];
+  var pinError = session.get(pinErrorKey);
+  if(pinError!=null){
+    if(pinError[field]!=null){
+      return pinError[field];
     }
   }
 };
 
-Template.markerAdd.events({
+Template.pinAdd.events({
   'submit form': function(e,t) {
     $("#lieu").trigger("geocode");
     e.preventDefault();
 
     var data = getData(e);
-    var markerError = {};
+    var pinError = {};
 
-    var ok = controlData(data, markerError);
+    var ok = controlData(data, pinError);
     if(ok){
-      markerAdd(data);
+      pinAdd(data);
     }else{
-      displayErrorMessage(markerError);
+      displayErrorMessage(pinError);
     }
   },
   'click .reset-image': function(){
@@ -211,30 +211,30 @@ var getDate = function(e){
   return new Date(year, month, day);
 }
 
-var controlData = function(data, markerError){
-  if(data.tagsArray.length == 0)                                        markerError.tags = 'Veuillez entrer au moins un tag!';
-  if(data.date == null || data.beginHour == '' || data.endHour == '')   markerError.date = 'Veuillez entrer une date valide!';
-  if(data.lat == '' || data.lng == '' || data.location == '')           markerError.mapPos = 'veuillez entrer un lieu!';
-  if(data.name == '')                                                   markerError.name = 'veuillez entrer un nom!';
-  return Object.getOwnPropertyNames(markerError).length === 0;
+var controlData = function(data, pinError){
+  if(data.tagsArray.length == 0)                                        pinError.tags = 'Veuillez entrer au moins un tag!';
+  if(data.date == null || data.beginHour == '' || data.endHour == '')   pinError.date = 'Veuillez entrer une date valide!';
+  if(data.lat == '' || data.lng == '' || data.location == '')           pinError.mapPos = 'veuillez entrer un lieu!';
+  if(data.name == '')                                                   pinError.name = 'veuillez entrer un nom!';
+  return Object.getOwnPropertyNames(pinError).length === 0;
 };
 
-var markerAdd = function(data){
-  Meteor.call('markerAdd', {tagsArray: data.tagsArray, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng, location: data.location, name: data.name, url: data.url, description: data.description, imageId: data.imageId}, function(e,r){
+var pinAdd = function(data){
+  Meteor.call('pinAdd', {tagsArray: data.tagsArray, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng, location: data.location, name: data.name, url: data.url, description: data.description, imageId: data.imageId}, function(e,r){
     session.set(notHidden, true);
     if(typeof e == 'undefined'){
-      session.clear(markerErrorKey);
-      session.set(submitMarkerError, false);
-      session.set(submitMarkerSuccess, true);
+      session.clear(pinErrorKey);
+      session.set(submitPinError, false);
+      session.set(submitPinSuccess, true);
       setPreferences(data);
     }else{
       console.log(e);
-      session.set(submitMarkerSuccess, false);
-      session.set(submitMarkerError, true);
+      session.set(submitPinSuccess, false);
+      session.set(submitPinError, true);
     }
   });
 };
 
-var displayErrorMessage = function(markerError){
-  session.set(markerErrorKey, markerError);
+var displayErrorMessage = function(pinError){
+  session.set(pinErrorKey, pinError);
 };

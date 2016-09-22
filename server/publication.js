@@ -19,13 +19,13 @@ Meteor.publish('singleTag', function(tagName) {
 });
 
   // /tag/"tagName"
-Meteor.publish('markersByTag', function(tagName) {
-  return Markers.find({tagsArray: tagName});
+Meteor.publish('pinsByTag', function(tagName) {
+  return Pins.find({tagsArray: tagName});
 });
 
-  // /marker/list
-Meteor.publish('markersAll', function() {
-  return Markers.find();
+  // /pin/list
+Meteor.publish('pinsAll', function() {
+  return Pins.find();
 });
 
 //TODO lib image

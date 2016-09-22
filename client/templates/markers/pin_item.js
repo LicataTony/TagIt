@@ -1,4 +1,4 @@
-Template.markerItem.helpers({
+Template.pinItem.helpers({
   name: function(){
     return this.name;
   },
@@ -20,7 +20,7 @@ Template.markerItem.helpers({
     return this.location;
   },
   imageFile: function(){
-    var image = Images.findOne(this.imageId); // tagname : params.tagname, id_marker : this._id
+    var image = Images.findOne(this.imageId); // tagname : params.tagname, id_pin : this._id
     return image;
   }
 });
