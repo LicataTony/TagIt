@@ -8,7 +8,10 @@
       <b>Adresse:</b> {{location}} <br>
       <!--TODO lib image-->
       {{#if imageFile}}
-      <img class="pin-image" src={{imageFile.link}} />
+        <img class="pin-image" src={{imageFile.link}} />
+      {{/if}}
+      {{#if adminPage}}
+        <input type="button" class="btn edit" value="Editer ce pin"/>
       {{/if}}
     </p>
   </div>

@@ -6,21 +6,15 @@
       </div>
     {{/if}}
     <form>
-      <label class="control-label" for="lieu">{{_ 'place'}} *</label>
-        <div class="controls" >
-          <input name="lieu" id="lieu" type="text" value="" placeholder="{{_ 'eventPlace'}}" class="form-control"/>
-          <span class="help-block">{{errorMessage 'lieu'}}</span>
-
-              <!-- geoloc hidden inputs -->
-            <div class="geoloc">
-              <input class="hidden" data-geo="lat" value="" />
-              <input class="hidden" data-geo="lng" value="" />
-              <input class="hidden" data-geo="formatted_address" value="" />
-            </div>
+      <label class="control-label" for="name">Nom *</label>
+        <div class="controls">
+          <input name="name" id="name" type="text" value="" placeholder="Nom de l'évenemenet / de votre entreprise" class="form-control"/>
+          <span class="help-block">{{errorMessage 'name'}}</span>
         </div>
       <label class="control-label" for="tagsName">{{_ 'tags'}} *</label>
         <div class="controls">
           <input name="tagsName" id="tagsName" type="text" value="" placeholder="{{_ 'tagsPlaceholder'}}" class="form-control"/>
+          <input name="privateTag" id="privateTag" type="text" value="" class="hidden"/>
           <span class="help-block">{{errorMessage 'tags'}}</span>
         </div>
         <label class="control-label" for="date">{{_ 'datehour'}} *</label>
@@ -36,23 +30,31 @@
             </div>
             <span class="help-block">{{errorMessage 'dates'}}</span>
           </div>
-        <label class="control-label" for="name">Nom *</label>
-          <div class="controls">
-            <input name="name" id="name" type="text" value="" placeholder="Nom de l'évenemenet / de votre entreprise" class="form-control"/>
-            <span class="help-block">{{errorMessage 'name'}}</span>
+        <label class="control-label" for="lieu">{{_ 'place'}} *</label>
+          <div class="controls" >
+            <input name="lieu" id="lieu" type="text" value="" placeholder="{{_ 'eventPlace'}}" class="form-control"/>
+            <span class="help-block">{{errorMessage 'lieu'}}</span>
+                <!-- geoloc hidden inputs -->
+              <div class="geoloc">
+                <input class="hidden" data-geo="lat" value="" />
+                <input class="hidden" data-geo="lng" value="" />
+                <input class="hidden" data-geo="formatted_address" value="" />
+              </div>
           </div>
-        <label class="control-label" for="url">Url</label>
+        <label class="control-label" for="url">Lien</label>
           <div class="controls">
             <input name="url" id="url" type="text" value="" placeholder="lien internet référant votre entreprise" class="form-control"/>
             <span class="help-block">{{errorMessage 'url'}}</span>
           </div>
-        <label class="control-label" for="description">Description</label>
+        <!--<label class="control-label" for="description">Description</label>
           <div class="controls">
             <input name="description" id="description" type="text" value="" placeholder="Description de votre entreprise" class="form-control"/>
             <span class="help-block">{{errorMessage 'description'}}</span>
-          </div>
+          </div> -->
+
           <!--TODO lib image-->
-        <label class="control-label">Ajoutez une image (10MB max)</label>
+
+      <!--  <label class="control-label">Ajoutez une image (10MB max)</label>
           {{#with currentUpload}}
             Uploading <b>{{file.name}}</b>:
             <span id="progress">{{progress.get}}%</span>
@@ -64,7 +66,7 @@
             <img src="{{currentImage.link}}" class="pin-image"/>
             <input type="button" class="btn reset-image" value="Supprimer l'image choisie"/>
             <br><br>
-          {{/if}}
+          {{/if}} -->
       <input type="submit" value="Submit" class="btn btn-primary"/>
     </form>
   </div>

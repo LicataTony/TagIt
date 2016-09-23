@@ -23,6 +23,11 @@ Meteor.publish('pinsByTag', function(tagName) {
   return Pins.find({tagsArray: tagName});
 });
 
+// /edit/"_id"
+Meteor.publish('pinsById', function(id) {
+  return Pins.find({_id: id});
+});
+
   // /pin/list
 Meteor.publish('pinsAll', function() {
   return Pins.find();

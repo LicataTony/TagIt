@@ -2,6 +2,6 @@
   "place" : "Lieu",
   "eventPlace" : "Lieu de l'évenement",
   "tags"  : "Tags",
-  "tagsPlaceholder" : "Vos tags (séparez-les avec un espace)"
-
+  "tagsPlaceholder" : "Vos tags (séparez-les avec un espace)",
+  "datehour" : "Date et heures"
 }

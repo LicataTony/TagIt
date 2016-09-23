@@ -1,0 +1,73 @@
+<Template name="pinEdit">
+  <div class="pin-add">
+    {{#if notHidden}}
+      <div class="well" style={{color}}>
+        <p>{{text}}</p>
+      </div>
+    {{/if}}
+    <form>
+      <label class="control-label" for="name">Nom *</label>
+        <div class="controls">
+          <input name="name" id="name" type="text" value="{{eventName}}" placeholder="Nom de l'évenemenet / de votre entreprise" class="form-control"/>
+          <span class="help-block">{{errorMessage 'name'}}</span>
+        </div>
+      <label class="control-label" for="tagsName">{{_ 'tags'}} *</label>
+        <div class="controls">
+          <input name="tagsName" id="tagsName" type="text" value="{{tagsArray}}" placeholder="{{_ 'tagsPlaceholder'}}" class="form-control"/>
+          <input name="privateTag" id="privateTag" type="text" value="" class="hidden"/>
+          <span class="help-block">{{errorMessage 'tags'}}</span>
+        </div>
+        <label class="control-label" for="date">{{_ 'datehour'}} *</label>
+          <div class="controls">
+            <div class="form-inline">
+              Date:
+              <input name="year" id="year" type="text" value="{{year}}" placeholder="YYYY (année)" class="form-control pin-date" maxlength="4"/>
+              <input name="month" id="month" type="text" value="{{month}}" placeholder="MM (mois)" class="form-control pin-date" maxlength="2"/>
+              <input name="day" id="day" type="text" value="{{day}}" placeholder="DD (jour)" class="form-control pin-date" maxlength="2"/>
+              Heures:
+              <input name="beginHour" id="beginHour" type="text" value="{{beginHour}}" placeholder="HH:MM (début)" class="form-control"/>
+              <input name="endHour" id="endHour" type="text" value="{{endHour}}" placeholder="HH:MM (fin)" class="form-control"/>
+            </div>
+            <span class="help-block">{{errorMessage 'dates'}}</span>
+          </div>
+        <label class="control-label" for="lieu">{{_ 'place'}} *</label>
+          <div class="controls" >
+            <input name="lieu" id="lieu" type="text" value="{{formatted_address}}" placeholder="{{_ 'eventPlace'}}" class="form-control"/>
+            <span class="help-block">{{errorMessage 'lieu'}}</span>
+                <!-- geoloc hidden inputs -->
+              <div class="geoloc">
+                <input class="hidden" data-geo="lat" value="{{lat}}" />
+                <input class="hidden" data-geo="lng" value="{{lng}}" />
+                <input class="hidden" data-geo="formatted_address" value="{{formatted_address}}" />
+              </div>
+          </div>
+        <label class="control-label" for="url">Lien</label>
+          <div class="controls">
+            <input name="url" id="url" type="text" value="{{url}}" placeholder="lien internet référant votre entreprise" class="form-control"/>
+            <span class="help-block">{{errorMessage 'url'}}</span>
+          </div>
+        <!--<label class="control-label" for="description">Description</label>
+          <div class="controls">
+            <input name="description" id="description" type="text" value="" placeholder="Description de votre entreprise" class="form-control"/>
+            <span class="help-block">{{errorMessage 'description'}}</span>
+          </div> -->
+
+          <!--TODO lib image-->
+
+      <!--  <label class="control-label">Ajoutez une image (10MB max)</label>
+          {{#with currentUpload}}
+            Uploading <b>{{file.name}}</b>:
+            <span id="progress">{{progress.get}}%</span>
+          {{else}}
+            <input id="fileInput" type="file" />
+          {{/with}}
+          <br>
+          {{#if currentUploadedFileId}}
+            <img src="{{currentImage.link}}" class="pin-image"/>
+            <input type="button" class="btn reset-image" value="Supprimer l'image choisie"/>
+            <br><br>
+          {{/if}} -->
+      <input type="submit" value="Modifier"   class="btn btn-primary"/>
+    </form>
+  </div>
+</Template>

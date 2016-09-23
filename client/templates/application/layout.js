@@ -15,7 +15,7 @@ Template.layout.events({
 })
 
 Template.layout.onRendered(function(){
-  session.set(currentLanguage, 'en');
+  session.set(currentLanguage, 'fr');
   Meteor.startup(function () {
    lang.startUp(currentLanguage);
  });

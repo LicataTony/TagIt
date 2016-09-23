@@ -22,5 +22,15 @@ Template.pinItem.helpers({
   imageFile: function(){
     var image = Images.findOne(this.imageId); // tagname : params.tagname, id_pin : this._id
     return image;
+  },
+  adminPage: function(){
+    var url = Router.current().route.getName();
+    return url.indexOf('pinsList') !== -1;
   }
 });
+
+Template.pinItem.events({
+  'click .edit': function(){
+    Router.go("pinEdit", {_id: this._id});
+  }
+})

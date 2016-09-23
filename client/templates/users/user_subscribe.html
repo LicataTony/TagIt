@@ -1,0 +1,42 @@
+<Template name="userSubscribe">
+  <div class="user-add">
+    {{#if notHidden}}
+      <div class="well" style={{color}}>
+        <p>{{text}}</p>
+      </div>
+    {{/if}}
+    <form>
+      <label class="control-label" for="email">Email</label>
+        <div class="controls">
+          <input name="email" id="email" type="text" value="" placeholder="Votre E-Mail" class="form-control"/>
+          <span class="help-block">{{errorMessage 'email'}}</span>
+        </div>
+      <label class="control-label" for="password">Mot de passe</label>
+        <div class="controls">
+          <input name="password" id="password" type="password" value="" placeholder="Votre mot de passe" class="form-control"/>
+          <span class="help-block">{{errorMessage 'password'}}</span>
+        </div>
+      <label class="control-label" for="confirmPassword">Confirmation mot de passe</label>
+        <div class="controls">
+          <input name="confirmPassword" id="confirmPassword" type="password" value="" placeholder="Confirmez votre mot de passe" class="form-control"/>
+          <span class="help-block">{{errorMessage 'confirmPassword'}}</span>
+        </div>
+      <label class="control-label" for="tagName">Tag privé</label>
+        <div class="controls">
+          <input name="privateTag" id="privateTag" type="text" value="" placeholder="Le tag privé qui vous représentera!" class="form-control"/>
+          <span class="help-block">{{errorMessage 'privateTag'}}</span>
+        </div>
+      <label class="control-label" for="webSite">Site web</label>
+        <div class="controls">
+          <input name="webSite" id="webSite" type="text" value="" placeholder="Lien de votre site web (http://www.therollingchefs.ch/)" class="form-control"/>
+          <span class="help-block">{{errorMessage 'webSite'}}</span>
+        </div>
+      <label class="control-label" for="description">Description</label>
+        <div class="controls">
+          <textarea name="description" id="description" value="" placeholder="Description de ce que vous faites!" class="form-control"> </textarea>
+          <span class="help-block">{{errorMessage 'description'}}</span>
+        </div>
+      <input type="submit" value="Submit" class="btn btn-primary"/>
+    </form>
+  </div>
+</Template>

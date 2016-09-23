@@ -123,7 +123,6 @@ Template.pinAdd.events({
         }
         template.currentUpload.set(false);
       });
-
       upload.start();
     }
   }
@@ -192,15 +191,12 @@ var getData = function(e,t){
     //getUrl
   var url = $(e.target).find('[id=url]').val();
 
-    //getDescription
-  var description = $(e.target).find('[id=description]').val();
-
   //TODO lib image
     //getImage
   var imageId = '';
   if(session.get(currentUploadedFileId)) imageId = session.get(currentUploadedFileId);
 
-  return {tagsArray: tagsArray, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng, location: location, name: name, url: url, description: description, imageId: imageId};
+  return {tagsArray: tagsArray, date: date, beginHour: beginHour, endHour: endHour, lat: lat, lng: lng, location: location, name: name, url: url, imageId: imageId};
 };
 
 
@@ -214,13 +210,13 @@ var getDate = function(e){
 var controlData = function(data, pinError){
   if(data.tagsArray.length == 0)                                        pinError.tags = 'Veuillez entrer au moins un tag!';
   if(data.date == null || data.beginHour == '' || data.endHour == '')   pinError.date = 'Veuillez entrer une date valide!';
-  if(data.lat == '' || data.lng == '' || data.location == '')           pinError.mapPos = 'veuillez entrer un lieu!';
-  if(data.name == '')                                                   pinError.name = 'veuillez entrer un nom!';
+  if(data.lat == '' || data.lng == '' || data.location == '')           pinError.mapPos = 'Veuillez entrer un lieu!';
+  if(data.name == '')                                                   pinError.name = 'Veuillez entrer un nom!';
   return Object.getOwnPropertyNames(pinError).length === 0;
 };
 
 var pinAdd = function(data){
-  Meteor.call('pinAdd', {tagsArray: data.tagsArray, date: data.date, beginHour: data.beginHour, endHour: data.endHour, lat: data.lat, lng: data.lng, location: data.location, name: data.name, url: data.url, description: data.description, imageId: data.imageId}, function(e,r){
+  Meteor.call('pinAdd', data, function(e,r){
     session.set(notHidden, true);
     if(typeof e == 'undefined'){
       session.clear(pinErrorKey);

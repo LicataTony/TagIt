@@ -2,7 +2,7 @@ import * as session from '/client/lib/session';
 
 var load = function(options){
   maps = [];
-  markers = [];
+  pins = [];
   return GoogleMaps.load(options);
 };
 
@@ -15,7 +15,7 @@ var build = function(lat,lng,zoom){
   return options;
 };
 
-var markers;
+var pins;
 
 var maps;
 
@@ -36,45 +36,45 @@ var ready = function(mapKey, action){
   GoogleMaps.ready(mapKey, action);
 };
 
-var addMarker = function(mapKey, lat , lng , idref , title){
+var addPin = function(mapKey, lat , lng , idref , title){
   exist = false;
 
-  markers.forEach(function(marker){
-    if(marker._id == idref) exist = true;
+  pins.forEach(function(pin){
+    if(pin._id == idref) exist = true;
   });
   if(!exist){
     var label = title.charAt(0);
     var currentMap = getMap(mapKey);
-    var marker = new google.maps.Marker({
+    var pin = new google.maps.Marker({
       position: new google.maps.LatLng(lat,lng),
       map: currentMap.instance,
       _id: idref,
       label: label,
       title: title
     });
-     //markers[idref] = marker;
-    markers.push(marker);
-    return marker;
+     //pins[idref] = pin;
+    pins.push(pin);
+    return pin;
   }else{
-    updateMarker(mapKey, lat, lng, idref, title);
+    updatePin(mapKey, lat, lng, idref, title);
   }
 };
 
-var addMapClickListener = function(markerArgs){
-  var currentMap = getMap(markerArgs.mapKey);
+var addMapClickListener = function(pinArgs){
+  var currentMap = getMap(pinArgs.mapKey);
   google.maps.event.addListener(currentMap.instance, 'click', function(event){
     session.set('latLng', {lat: event.latLng.lat(), lng: event.latLng.lng()});
-    addMarker(markerArgs.mapKey, event.latLng.lat(), event.latLng.lng(), markerArgs._id, markerArgs.title);
+    addPin(pinArgs.mapKey, event.latLng.lat(), event.latLng.lng(), pinArgs._id, pinArgs.title);
   });
 };
 
-var addMarkerClickListener = function(id, listener) {
-  var choosenMarker;
-  markers.forEach(function(marker){
-    if(marker._id==id) choosenMarker=marker;
+var addPinClickListener = function(id, listener) {
+  var choosenPin;
+  pins.forEach(function(pin){
+    if(pin._id==id) choosenPin=pin;
   });
-  if(choosenMarker){
-    choosenMarker.addListener('click', listener);
+  if(choosenPin){
+    choosenPin.addListener('click', listener);
   }
 };
 
@@ -82,49 +82,49 @@ var setMap = function(key, map){
   maps.push({key: key, map: map});
 };
 
-var deleteMarker = function(id){
-  markers.forEach(function(marker){
-    if(marker._id==id){
-      marker.setMap(null);
-      // Remove the reference to this marker instance
-      var index = markers.indexOf(marker);
+var deletePin = function(id){
+  pins.forEach(function(pin){
+    if(pin._id==id){
+      pin.setMap(null);
+      // Remove the reference to this pin instance
+      var index = pins.indexOf(pin);
       if(index!==-1){
-        markers.splice(index, 1);
+        pins.splice(index, 1);
       }
     }
   });
 };
 
-var updateMarker = function(mapKey, lat , lng , idref , title){
+var updatePin = function(mapKey, lat , lng , idref , title){
   var label = title.charAt(0);
   var currentMap = getMap(mapKey);
-  markers.forEach(function(marker){
-    if(marker._id==idref){
-      marker.setMap(currentMap.instance);
-      marker.setPosition(new google.maps.LatLng(lat,lng));
-      marker.setTitle(title);
-      marker.setLabel(label);
+  pins.forEach(function(pin){
+    if(pin._id==idref){
+      pin.setMap(currentMap.instance);
+      pin.setPosition(new google.maps.LatLng(lat,lng));
+      pin.setTitle(title);
+      pin.setLabel(label);
     }
   });
 };
 
-var updateSettingMarker = function(idref, key, value){
-  var markerToUpdate ; // = markers[idref];
+var updateSettingPin = function(idref, key, value){
+  var pinToUpdate ; // = pins[idref];
   // console.log(idref);
-  // console.log(markers);
+  // console.log(pins);
 
-  markers.forEach(function(marker){
-    if(marker._id==idref){
-      markerToUpdate = marker
+  pins.forEach(function(pin){
+    if(pin._id==idref){
+      pinToUpdate = pin
       // break;
     }
   });
 
-  if (key == 'map')   markerToUpdate.setMap(value);
-  if (key == 'loc')   markerToUpdate.setPosition(new google.maps.LatLng(value[0],value[1]));
-  if (key == 'title') marker.setTitle(title);
-  if (key == 'label') marker.setLabel(label);
-    console.log(markers);
+  if (key == 'map')   pinToUpdate.setMap(value);
+  if (key == 'loc')   pinToUpdate.setPosition(new google.maps.LatLng(value[0],value[1]));
+  if (key == 'title') pin.setTitle(title);
+  if (key == 'label') pin.setLabel(label);
+    console.log(pins);
 };
 
 
@@ -138,20 +138,20 @@ var getMap = function(mapKey){
   return currentMap;
 };
 
-var getMarkerProperties = function(markerId){
-  var markerProperties = {};
-  if(markers){
-    markers.forEach(function(marker){
-      if(marker._id == markerId){
-        markerProperties = {
-          lat: marker.getPosition().lat(),
-          lng: marker.getPosition().lng(),
-          idref: marker._id,
-          title: marker.title
+var getPinProperties = function(pinId){
+  var pinProperties = {};
+  if(pins){
+    pins.forEach(function(pin){
+      if(pin._id == pinId){
+        pinProperties = {
+          lat: pin.getPosition().lat(),
+          lng: pin.getPosition().lng(),
+          idref: pin._id,
+          title: pin.title
         };
       }
     });
-    if(markerProperties) return markerProperties;
+    if(pinProperties) return pinProperties;
   }
   return null;
 };
@@ -162,12 +162,12 @@ module.exports = {
   build: build,
   getOptions: getOptions,
   ready: ready,
-  addMarker: addMarker,
+  addPin: addPin,
   addMapClickListener: addMapClickListener,
-  addMarkerClickListener: addMarkerClickListener,
+  addPinClickListener: addPinClickListener,
   setMap: setMap,
-  deleteMarker: deleteMarker,
-  updateMarker: updateMarker,
-  updateSettingMarker: updateSettingMarker,
-  getMarkerProperties: getMarkerProperties
+  deletePin: deletePin,
+  updatePin: updatePin,
+  updateSettingPin: updateSettingPin,
+  getPinProperties: getPinProperties
 };
